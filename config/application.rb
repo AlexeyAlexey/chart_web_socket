@@ -8,7 +8,7 @@ Bundler.require(*Rails.groups)
 
 module ChatWebSocket
   class Application < Rails::Application
-    config.assets.precompile += %w( home.js task.js )
+    config.assets.precompile += %w( home.js task.js d3_chart_github.js)
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

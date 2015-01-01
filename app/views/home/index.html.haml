@@ -1,3 +1,4 @@
+= javascript_include_tag "d3_chart_github"
 = javascript_include_tag "home"
 = javascript_include_tag "task"
 .message
@@ -5,6 +6,21 @@
   %p 
     %span{:class => 'who'}
     %span{:class => 'message'}
-= link_to "Connect", "###", :id => "connect_web_socket", :class => "btn btn-primary"
-= link_to "Send Message", "###", :id => :send_message, :class => "btn btn-primary"
+#d3_chart_github
+%p
+  %input{id: "access_token", type: "text", size: 100,value: "f8ab2db8e3a25149ce2d7c1e0f3e6008b9b747bc"}
+%p
+  %input{id: "repo", type: "text", size: 50, value: "rubygems/rubygems"}
+%p
+  Date since
+  %input{id: "datepicker",  type: "text"}
+
+#create_d3_chart_github
+  %i{class: "icon-zoom-in"}
+
+%button{type: "button", class: "btn btn-primary", :id => "connect_web_socket"}
+  Connect
+
+%button{type: "button", class: "btn btn-primary", :id => "build_chart"}
+  Build Chart
 

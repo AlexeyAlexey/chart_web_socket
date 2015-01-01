@@ -1,5 +1,5 @@
 WebsocketRails::EventMap.describe do
-  namespace :task do
+  namespace :tasks do
     subscribe :create, to: TaskController, with_method: :create
   end
   # You can use this file to map incoming events to controller actions.

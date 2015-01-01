@@ -19,12 +19,32 @@ gem 'execjs'
 gem 'therubyracer'
 gem "byebug"
 
+# -delete- Ruby Background Processing Library
+gem 'delayed_job_active_record'
+
+gem 'activejob'
+
+gem 'octokit'
+gem 'd3-rails'
+###############
+gem 'sidekiq'
+# if you require 'sinatra' you get the DSL extended to Object
+gem 'sinatra', '>= 1.3.0', :require => nil
+###############
+
+#spawn gem for Rails to easily fork or thread long-running code blocks
+gem 'spawnling', '~>2.1'
+
 gem "haml-rails"
 gem "less-rails"
 gem 'devise'
 
 gem 'websocket-rails'
 
+gem "redis"
+gem "hiredis"
+
+gem 'jquery-ui-rails'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks

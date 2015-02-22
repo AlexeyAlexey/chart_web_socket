@@ -16,11 +16,14 @@ class RequestToGithub < ActiveJob::Base
 
     if commits_from_branch.is_a?(Array)
       while client.last_response.rels[:next]
-        last_response = client.get(client.last_response.rels[:next].href)
-        commits_from_branch.concat(last_response) if last_response.is_a?(Array)    
+      	begin
+          last_response = client.get(client.last_response.rels[:next].href)
+          commits_from_branch.concat(last_response) if last_response.is_a?(Array)
+        rescue Exception => e
+          Rails.logger.error " #{Time.now} RequestToGithub #{e.message}"
+        end    
       end
     end
-
     commit_issues = []
     commits_from_branch.each do |commit|
 	    message = commit["commit"]["message"]
@@ -30,7 +33,6 @@ class RequestToGithub < ActiveJob::Base
 	      issues = commit["commit"]["message"].scan(/#(\d*)/).flatten
 	      issues.delete("")
 	    end
-
 	    unless issues.nil?
 	      commit_issue = {}
 	      commit_issue[:sha] = commit["sha"]
@@ -38,7 +40,6 @@ class RequestToGithub < ActiveJob::Base
 	      commit_issue[:message] = commit["commit"]["message"]
 	      commit_issue[:issues] = issues
 	      commit_issue[:labels] = []
-
 	      issues.each do |issue|
 	        begin
 	          response_lables = client.labels_for_issue('rubygems/rubygems', issue)
@@ -79,7 +80,6 @@ class RequestToGithub < ActiveJob::Base
 	#                                        :labels => [[{:url => "", :name => "", :color => "000000"}, ...]}
 	#                         }
 
-
 	hash_graph = {time: [], colors: {}}
 	init_arr = []
 	timestamp_commit_issues.length.times {|i| init_arr << 0}
@@ -101,7 +101,6 @@ class RequestToGithub < ActiveJob::Base
 	  end
 	  i += 1	
 	end
-
 	length = hash_graph[:time].length
 	data = []
 	length.times do |n| 

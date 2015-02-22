@@ -7,16 +7,43 @@
     %span{:class => 'who'}
     %span{:class => 'message'}
 #d3_chart_github
-%p
+%p 
+  %strong Access Token:
   %input{id: "access_token", type: "text", size: 100,value: "f8ab2db8e3a25149ce2d7c1e0f3e6008b9b747bc"}
 %p
+  %strong Repository
   %input{id: "repo", type: "text", size: 50, value: "rubygems/rubygems"}
 %p
-  Date since
+  %strong Date since
   %input{id: "datepicker",  type: "text"}
 
+%p
+  Resize
+  Width: 
+  %input{id: "width_size",  type: "number"}
+  Height:
+  %input{id: "height_size",  type: "number"}
+%p
+  X Exis Text Size (px): 
+  %input{id: "x_text_size_px",  type: "number"}
+  Y Exis Text Size (px):
+  %input{id: "y_text_size_px",  type: "number"}
+%p
+  Bottom Legend Text Size (px): 
+  %input{id: "bottom_lg_text_size_px",  type: "number"}
+  Bottom Legend Rect Size (px):
+  %input{id: "bottom_lg_rect_size_px",  type: "number"}
+%p
+  Window Legend Text Size (px): 
+  %input{id: "window_lg_text_size_px",  type: "number"}
+  Window Legend Rect Size (px):
+  %input{id: "window_lg_rect_size_px",  type: "number"}
+
+%button{type: "button", class: "btn btn-primary", :id => "resize"}
+  Resize
+
 #create_d3_chart_github
-  %i{class: "icon-zoom-in"}
+
 
 %button{type: "button", class: "btn btn-primary", :id => "connect_web_socket"}
   Connect

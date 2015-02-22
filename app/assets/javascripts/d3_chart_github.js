@@ -1,4 +1,6 @@
-function create_d3_chart_github(id_chart, data_origin, filter, width_chart, height_chart) {
+function create_d3_chart_github(id_chart, data_origin, filter, chart_size) {
+    //chart_size = {"width": , "height": , "x_text_size_px": , "y_text_size_px": , "bottom_lg_text_size_px": , "bottom_lg_rect_size_px": , "window_lg_text_size_px": , "window_lg_rect_size_px": }
+
     var data = $.extend(true, [], data_origin );
 
     var legend_color = set_color_legend(data);
@@ -14,8 +16,8 @@ function create_d3_chart_github(id_chart, data_origin, filter, width_chart, heig
     };
     // set color
     var margin = {top: 40, right: 40, bottom: 100, left: 40},
-        width = width_chart - margin.left - margin.right,
-        height = height_chart - margin.top - margin.bottom;
+        width = chart_size["width"] - margin.left - margin.right,
+        height = chart_size["height"] - margin.top - margin.bottom;
   //Set up scales
     d3.select("div#"+id_chart).selectAll("*").remove();
     
@@ -90,12 +92,12 @@ function create_d3_chart_github(id_chart, data_origin, filter, width_chart, heig
     svg.append("g")
           .attr("class","x axis")
           .attr("transform", "translate(0," + height + ")")
-          .style("font-size", xScale.rangeBand()/7 + "px")
+          .style("font-size", chart_size["x_text_size_px"] + "px")
           .call(xAxis);
-
+  //xScale.rangeBand()/7 + "px"
     svg.append("g")
       .attr("class","y axis")
-      .style("font-size", xScale.rangeBand()/7 + "px")
+      .style("font-size", chart_size["y_text_size_px"] + "px")
       .call(yAxis);
 
     //bars
@@ -127,27 +129,29 @@ function create_d3_chart_github(id_chart, data_origin, filter, width_chart, heig
                 .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
           
           legend_window.append("rect")
-              .attr("x", p.x + 10)
+              .attr("x", p.x + xScale.rangeBand()/14)
               .attr("y", p.y)
-              .attr("width", 18)
-              .attr("height", 18)
+              .attr("width", chart_size["window_lg_rect_size_px"] + "px")
+              .attr("height", chart_size["window_lg_rect_size_px"] + "px")
               .style("fill", color);
 
           legend_window.append("text")
-              .attr("x", p.x + 10)
+              .attr("x", p.x + xScale.rangeBand()/14)
               .attr("y", p.y)
               .attr("dx", "-.35em")
-              .attr("dy", "1.35em")
+              .attr("dy", chart_size["window_lg_text_size_px"]/80 + "em")
               .style("text-anchor", "end")
+              .style("font-size", chart_size["window_lg_text_size_px"] + "px")
               .text(function(d) { return d_column[d] + " - " + d; });
           
           var svg_legend_window = svg.select(".currentBar");
+                
           //Get auto value element
           var width = svg_legend_window.node().getBBox().width,
               height = svg_legend_window.node().getBBox().height,
               x = svg_legend_window.node().getBBox().x,
               y = svg_legend_window.node().getBBox().y;
-
+          //area around legend
           svg_legend_window.insert("rect",":first-child")
             .attr("width", width + 20)
             .attr("height", height + 20)
@@ -155,7 +159,9 @@ function create_d3_chart_github(id_chart, data_origin, filter, width_chart, heig
             .attr("y", y - 10)
             .attr("fill", "#00E540")
             .attr("rx", 10)
-            .attr("ry", 10);
+            .attr("ry", 10)
+            .style("z-index", 2);
+
         }
         else{
           currentBar.remove();
@@ -178,7 +184,8 @@ function create_d3_chart_github(id_chart, data_origin, filter, width_chart, heig
       
     //legend
     var dx_legend = 0, dy_legend = 0;
-    var x_square_legend = xScale.rangeBand()/7, y_square_legend = xScale.rangeBand()/7;
+    var x_square_legend = chart_size["bottom_lg_rect_size_px"], 
+        y_square_legend = chart_size["bottom_lg_rect_size_px"];
 
     var color_legend = d3.scale.ordinal()
           .range(legend_color["color"]);
@@ -207,7 +214,7 @@ function create_d3_chart_github(id_chart, data_origin, filter, width_chart, heig
         else{
           filter.push(this["__data__"]);
         };
-        create_d3_chart_github(id_chart, data_origin, filter, width_chart, height_chart);
+        create_d3_chart_github(id_chart, data_origin, filter, chart_size);
         //chart("chat2" , clone, "category - command"); 
         //alert(this.attr("fill", "blue"))
       });
@@ -215,17 +222,21 @@ function create_d3_chart_github(id_chart, data_origin, filter, width_chart, heig
     
     legend.append("rect")
         .attr("x", 0)
-        .attr("width", x_square_legend)
-        .attr("height", y_square_legend)
+        .attr("width", chart_size["bottom_lg_rect_size_px"] + "px")
+        .attr("height", chart_size["bottom_lg_rect_size_px"] + "px")
         .style("fill", color_legend);
+
+        //.attr("width", x_square_legend)
+        //.attr("height", y_square_legend)
+        //.style("fill", color_legend);
 
     legend.append("text")
         .attr("x", 0)
         .attr("dx", "-.35em")
-        .attr("y", x_square_legend/2)
+        .attr("y", chart_size["bottom_lg_text_size_px"]/4)
         .attr("dy", ".35em")
         .style("text-anchor", "end")
-        .style("font-size", xScale.rangeBand()/7 + "px")
+        .style("font-size", chart_size["bottom_lg_text_size_px"] + "px")
         .text(function(d) { return d; });
     
   };

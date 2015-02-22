@@ -4,7 +4,7 @@
 
 jQuery ->    
   $(document).ready () ->
-   global = {} 
+   
    success = (response) ->
     alert("Created: " + response)
 
@@ -12,7 +12,17 @@ jQuery ->
     alert("Faild to create Production: " + response.error)
     
    response_from_server = (response) ->
-    create_d3_chart_github("create_d3_chart_github", response, [], 800, 400) if response.length != 0
+    window.response_d3_chart = response
+    chart_size = 
+     "width": 900 
+     "height": 800
+     "x_text_size_px": 12
+     "y_text_size_px": 12
+     "bottom_lg_text_size_px": 12
+     "bottom_lg_rect_size_px": 12
+     "window_lg_text_size_px": 12
+     "window_lg_rect_size_px": 12
+    create_d3_chart_github("create_d3_chart_github", response, [], chart_size) if response.length != 0
 
    task = 
     name: 'Start taking advantage of WebSocket'
@@ -43,6 +53,22 @@ jQuery ->
     window.dispatcher.trigger 'tasks.create', task, success, failure
 
    $("#datepicker").datepicker()
+
+   $("#resize").bind 'click', (eventObject) ->
+     chart_size = {}
+     chart_size["width"] = $("#width_size").val()
+     chart_size["height"] = $("#height_size").val()
+     chart_size["x_text_size_px"] = $("#x_text_size_px").val()
+     chart_size["y_text_size_px"] = $("#y_text_size_px").val()
+     chart_size["bottom_lg_text_size_px"] = $("#bottom_lg_text_size_px").val()
+     chart_size["bottom_lg_rect_size_px"] = $("#bottom_lg_rect_size_px").val()
+     chart_size["window_lg_text_size_px"] = $("#window_lg_text_size_px").val()
+     chart_size["window_lg_rect_size_px"] = $("#window_lg_rect_size_px").val()
+
+
+     chart_div = $("#create_d3_chart_github")
+     chart_div.css({"z-inex": 1, "background-color": "white"}) 
+     create_d3_chart_github("create_d3_chart_github", window.response_d3_chart, [], chart_size) if window.response_d3_chart.length != 0
 
 
 
